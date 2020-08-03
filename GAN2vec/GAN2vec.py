@@ -129,7 +129,7 @@ class GAN2vec():
         # model.add(Conv2DTranspose(1, kernel_size=(3, 34), strides=2))
         # model.add(Reshape((7, 64, 1)))
         model.summary()
-        model.save("GAN2vec_generator.h5")
+        model.save("GAN2vec_generator_length15.h5")
         # tf.keras.utils.plot_model(model, to_file='GAN2vec_generator.png', show_shapes=True)
 
         noise = Input(shape=(self.latent_dim,))
@@ -151,7 +151,7 @@ class GAN2vec():
         model.add(Flatten())
         model.add(Dense(1, activation='sigmoid'))
         model.summary()
-        model.save("GAN2vec_discriminator.h5")
+        model.save("GAN2vec_discriminator_length15.h5")
         # tf.keras.utils.plot_model(model, to_file='GAN2vec_discriminator.png', show_shapes=True)
 
         sentence = Input(shape=self.sentence_shape)

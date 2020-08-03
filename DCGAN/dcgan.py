@@ -1,14 +1,28 @@
 from __future__ import print_function, division
 
-from keras.datasets import mnist
+# from keras.datasets import mnist
+# from keras.layers import Input, Dense, Reshape, Flatten, Dropout
+# from keras.layers import BatchNormalization, Activation, ZeroPadding2D
+# from keras.layers.advanced_activations import LeakyReLU
+# from keras.layers.convolutional import UpSampling2D, Conv2D
+# from keras.models import Sequential, Model
+# from keras.optimizers import Adam
+
+# from tensorflow.keras.datasets import mnist
+# from tensorflow.keras.layers import Input, Dense, Reshape, Flatten, Dropout
+# from tensorflow.keras.layers import BatchNormalization, Activation, ZeroPadding2D
+# from tensorflow.keras.layers import LeakyReLU
+# from tensorflow.keras.layers import UpSampling2D, Conv2D
+# from tensorflow.keras.models import Sequential, Model
+# from tensorflow.keras.optimizers import Adam
+
+from tensorflow.keras.datasets import mnist
+from tensorflow.keras.optimizers import Adam
 from keras.layers import Input, Dense, Reshape, Flatten, Dropout
 from keras.layers import BatchNormalization, Activation, ZeroPadding2D
 from keras.layers.advanced_activations import LeakyReLU
 from keras.layers.convolutional import UpSampling2D, Conv2D
 from keras.models import Sequential, Model
-# from keras.optimizers import Adam
-from tensorflow.keras.optimizers import Adam
-import tensorflow as tf
 
 
 import matplotlib.pyplot as plt
@@ -29,7 +43,7 @@ class DCGAN():
         optimizer = Adam(0.0002, 0.5)
 
         # Build and compile the discriminator
-        self.discriminator = self.build_discriminator
+        self.discriminator = self.build_discriminator()
         self.discriminator.compile(loss='binary_crossentropy',
             optimizer=optimizer,
             metrics=['accuracy'])
@@ -70,14 +84,12 @@ class DCGAN():
         model.add(Activation("tanh"))
 
         model.summary()
-        model.save("dcgan_generator.h5")
-        # tf.keras.utils.plot_model(model, to_file='dcgan_generator.png', show_shapes=True, dpi=1024)
+
         noise = Input(shape=(self.latent_dim,))
         img = model(noise)
 
         return Model(noise, img)
 
-    @property
     def build_discriminator(self):
 
         model = Sequential()
@@ -102,8 +114,7 @@ class DCGAN():
         model.add(Dense(1, activation='sigmoid'))
 
         model.summary()
-        model.save("dcgan_discriminator.h5")
-        # tf.keras.utils.plot_model(model, to_file='dcgan_discriminator.png', show_shapes=True,dpi=1024)
+
         img = Input(shape=self.img_shape)
         validity = model(img)
 
@@ -147,6 +158,7 @@ class DCGAN():
 
             # Train the generator (wants discriminator to mistake images as real)
             g_loss = self.combined.train_on_batch(noise, valid)
+
             # Plot the progress
             print ("%d [D loss: %f, acc.: %.2f%%] [G loss: %f]" % (epoch, d_loss[0], 100*d_loss[1], g_loss))
 

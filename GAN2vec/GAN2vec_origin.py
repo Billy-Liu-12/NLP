@@ -104,6 +104,7 @@ class GAN2vec():
         model.add(Conv2DTranspose(1, kernel_size=(3, 34), strides=2))
         model.add(Reshape((7, 64, 1)))
         model.summary()
+        model.save("GAN2vec_generator_origin.h5")
 
         noise = Input(shape=(self.latent_dim,))
         sentence = model(noise)
@@ -120,6 +121,7 @@ class GAN2vec():
         model.add(Flatten())
         model.add(Dense(1, activation='sigmoid'))
         model.summary()
+        model.save("GAN2vec_discriminator_origin.h5")
         sentence = Input(shape=self.sentence_shape)
         validity = model(sentence)
 
