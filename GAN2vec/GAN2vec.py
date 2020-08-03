@@ -233,7 +233,7 @@ class GAN2vec():
         # r, c = 5, 5
         r, c = 15, 15
         noise = np.random.normal(0, 1, (r * c, 100))
-        gen_sentence = GAN2vec.generator.predict(noise)
+        gen_sentence = self.generator.predict(noise)
         test = np.squeeze(gen_sentence)
         for i in test:
             sentence = ""
@@ -247,7 +247,7 @@ class GAN2vec():
         r, c = 15, 15
         # np.random.normal(정규분포 평균, 표준편차, (행, 열) or 개수) : 정규 분포 확률 밀도에서 표본 추출
         noise = np.random.normal(0, 1, (r * c, 100))
-        gen_sentence = GAN2vec.generator.predict(noise)
+        gen_sentence = self.generator.predict(noise)
         test = np.squeeze(gen_sentence)
         sentence_list = []
         for i in test:
@@ -260,10 +260,10 @@ class GAN2vec():
 
 
 if __name__ == '__main__':
-    GAN2vec = GAN2vec()
-    GAN2vec.pretrain_D(epochs=100)
-    GAN2vec.train(epochs=4000, batch_size=32, save_interval=50)
+    gan2vec = GAN2vec()
+    gan2vec.pretrain_D(epochs=100)
+    gan2vec.train(epochs=4000, batch_size=32, save_interval=50)
 
     for i in range(100):
-        t = GAN2vec.predict()
+        t = gan2vec.predict()
         print(t)
