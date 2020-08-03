@@ -17,8 +17,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/WGAN2vec/WGAN2vec.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="389">
               <caret line="245" column="16" selection-start-line="245" selection-start-column="16" selection-end-line="245" selection-end-column="16" />
+=======
+            <state relative-caret-position="351">
+              <caret line="243" column="24" lean-forward="true" selection-start-line="243" selection-start-column="24" selection-end-line="243" selection-end-column="24" />
+>>>>>>> b88a1252c5a620d49b4cf46a1afd36915fdba4da
               <folding>
                 <element signature="e#0#47#0" expanded="true" />
               </folding>
@@ -53,7 +58,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GAN2vec/GAN2vec.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="19">
+=======
+            <state relative-caret-position="-3221">
+>>>>>>> b88a1252c5a620d49b4cf46a1afd36915fdba4da
               <caret line="79" column="47" selection-start-line="79" selection-start-column="47" selection-end-line="79" selection-end-column="47" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
@@ -91,12 +100,21 @@
         <option value="$PROJECT_DIR$/dcgan.py" />
         <option value="$PROJECT_DIR$/DCGAN/test.py" />
         <option value="$PROJECT_DIR$/DCGAN/dcgan.py" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/DCGAN/images/.gitignore" />
         <option value="$PROJECT_DIR$/../Keras-GAN-master/Keras-GAN-master/wgan/wgan.py" />
         <option value="$PROJECT_DIR$/GAN2vec/GAN2vec_origin.py" />
         <option value="$PROJECT_DIR$/WGAN2vec/WGAN2vec.py" />
         <option value="$PROJECT_DIR$/GAN2vec/GAN2vec.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
+=======
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/DCGAN/images/.gitignore" />
+        <option value="$PROJECT_DIR$/../Keras-GAN-master/Keras-GAN-master/wgan/wgan.py" />
+        <option value="$PROJECT_DIR$/GAN2vec/GAN2vec_origin.py" />
+        <option value="$PROJECT_DIR$/GAN2vec/GAN2vec.py" />
+        <option value="$PROJECT_DIR$/WGAN2vec/WGAN2vec.py" />
+>>>>>>> b88a1252c5a620d49b4cf46a1afd36915fdba4da
       </list>
     </option>
   </component>
@@ -108,8 +126,13 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
+<<<<<<< HEAD
     <option name="x" value="613" />
     <option name="y" value="2" />
+=======
+    <option name="x" value="471" />
+    <option name="y" value="3" />
+>>>>>>> b88a1252c5a620d49b4cf46a1afd36915fdba4da
     <option name="width" value="1294" />
     <option name="height" value="1038" />
   </component>
@@ -149,7 +172,10 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+<<<<<<< HEAD
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+=======
+>>>>>>> b88a1252c5a620d49b4cf46a1afd36915fdba4da
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Keras-GAN-master" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -313,7 +339,11 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
+<<<<<<< HEAD
     <frame x="613" y="2" width="1294" height="1038" extended-state="0" />
+=======
+    <frame x="471" y="3" width="1294" height="1038" extended-state="0" />
+>>>>>>> b88a1252c5a620d49b4cf46a1afd36915fdba4da
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2611465" />
@@ -409,6 +439,16 @@
     <entry file="file://$PROJECT_DIR$/WGAN2vec/train.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+<<<<<<< HEAD
+=======
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="1" column="5" lean-forward="true" selection-start-line="1" selection-start-column="5" selection-end-line="1" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+>>>>>>> b88a1252c5a620d49b4cf46a1afd36915fdba4da
     <entry file="file://$PROJECT_DIR$/DCGAN/images/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="19">
@@ -446,6 +486,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="95">
@@ -456,6 +497,11 @@
     <entry file="file://$PROJECT_DIR$/GAN2vec/GAN2vec.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="19">
+=======
+    <entry file="file://$PROJECT_DIR$/GAN2vec/GAN2vec.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3221">
+>>>>>>> b88a1252c5a620d49b4cf46a1afd36915fdba4da
           <caret line="79" column="47" selection-start-line="79" selection-start-column="47" selection-end-line="79" selection-end-column="47" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
@@ -465,8 +511,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/WGAN2vec/WGAN2vec.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="389">
           <caret line="245" column="16" selection-start-line="245" selection-start-column="16" selection-end-line="245" selection-end-column="16" />
+=======
+        <state relative-caret-position="351">
+          <caret line="243" column="24" lean-forward="true" selection-start-line="243" selection-start-column="24" selection-end-line="243" selection-end-column="24" />
+>>>>>>> b88a1252c5a620d49b4cf46a1afd36915fdba4da
           <folding>
             <element signature="e#0#47#0" expanded="true" />
           </folding>
