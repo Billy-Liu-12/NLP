@@ -194,7 +194,8 @@ class GAN2vec():
     def show_sentence(self, epoch):
         r, c = 5, 5
         noise = np.random.normal(0, 1, (r * c, 100))
-        gen_sentence = GAN2vec.generator.predict(noise)
+        # gen_sentence = GAN2vec.generator.predict(noise)
+        gen_sentence = self.generator.predict(noise)
         test = np.squeeze(gen_sentence)
         for i in test:
             sentence = ""
@@ -206,7 +207,8 @@ class GAN2vec():
     def predict(self):
         r, c = 5, 5
         noise = np.random.normal(0, 1, (r * c, 100))
-        gen_sentence = GAN2vec.generator.predict(noise)
+        # gen_sentence = GAN2vec.generator.predict(noise)
+        gen_sentence = self.generator.predict(noise)
         test = np.squeeze(gen_sentence)
         sentence_list = []
         for i in test:
@@ -218,9 +220,9 @@ class GAN2vec():
         return sentence
 
 if __name__ == '__main__':
-    GAN2vec = GAN2vec()
-    GAN2vec.pretrain_D(epochs=100)
-    GAN2vec.train(epochs=4000, batch_size=32, save_interval=50)
+    gan2vec = GAN2vec()
+    gan2vec.pretrain_D(epochs=100)
+    gan2vec.train(epochs=4000, batch_size=32, save_interval=50)
     for i in range(100):
-        t = GAN2vec.predict()
+        t = gan2vec.predict()
         print(t)
