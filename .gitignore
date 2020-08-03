@@ -1,2 +1,6 @@
 *.h5
 /*.h5
+*/images/*.png
+*/images/*.jpg
+*/*.jpg
+*/*.png
