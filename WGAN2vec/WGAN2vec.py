@@ -1,38 +1,58 @@
 from __future__ import print_function, division
 
-# from keras.datasets import mnist
-# from keras.layers import Input, Dense, Reshape, Flatten, Dropout
-# from keras.layers import BatchNormalization, Activation, ZeroPadding2D
-# from keras.layers.advanced_activations import LeakyReLU
-# from keras.layers.convolutional import UpSampling2D, Conv2D
-# from keras.models import Sequential, Model
-# from keras.optimizers import RMSprop
 from tensorflow.keras.datasets import mnist
-from tensorflow.keras.layers import Input, Dense, Reshape, Flatten, Dropout
-from tensorflow.keras.layers import BatchNormalization, Activation, ZeroPadding2D
-from tensorflow.keras.layers import LeakyReLU
-from tensorflow.keras.layers import UpSampling2D, Conv2D
-from tensorflow.keras.models import Sequential, Model
-from tensorflow.keras.optimizers import RMSprop
+from tensorflow.keras.optimizers import Adam
+from keras.layers import Input, Dense, Reshape, Flatten, Dropout
+from keras.layers import BatchNormalization, Activation, ZeroPadding2D
+from keras.layers.advanced_activations import LeakyReLU
+from keras.layers.convolutional import UpSampling2D, Conv2D
+from keras.models import Sequential, Model
+from keras.optimizers import RMSprop
 
 import keras.backend as K
 
 import matplotlib.pyplot as plt
 
-
-
-
-import sys
-
 import numpy as np
 import pandas as pd
 import gensim
 
+# Read Data
+raw_data = pd.read_csv("./train.txt", sep="\n")
 
-class WGAN():
+# ignore length <7 sentence,put it in length=7, split sentence 0:7 which length >7
+data = []
+for i in raw_data["text"]:
+    split_text = i.split(" ")
+    if len(split_text) < 7:
+        pass
+    elif len(split_text) == 7:
+        data.append(split_text)
+    else:
+        data.append(split_text[0:7])
+
+# make word2vec model, dimension = 64
+model = gensim.models.Word2Vec(data, size=64)
+
+# change sentence to vector stack
+sentence_to_word_vec = np.zeros(shape=(len(data), 7, 64))
+for sentence_index, i in enumerate(data):
+    temp_list = np.zeros(shape=(7, 64))
+    for idx, j in enumerate(i):
+        try:
+            temp_list[idx] = np.array([model.wv.get_vector(j)])
+        except:
+            temp_list[idx] = np.array([model.wv.get_vector("<unk>")])
+    temp_list = np.reshape(temp_list, (1, 7, 64))
+    sentence_to_word_vec[sentence_index] = temp_list
+
+# add one dimension
+sentence_to_word_vec = np.expand_dims(sentence_to_word_vec, axis=-1)
+
+class WGAN2vec():
     def __init__(self):
-        self.img_rows = 28
-        self.img_cols = 28
+        self.img_rows = 7
+        self.img_cols = 64
         self.channels = 1
         self.img_shape = (self.img_rows, self.img_cols, self.channels)
         self.latent_dim = 100
@@ -88,6 +108,7 @@ class WGAN():
         model.add(Activation("tanh"))
 
         model.summary()
+        model.save("WGAN2vec_generator.h5")
 
         noise = Input(shape=(self.latent_dim,))
         img = model(noise)
@@ -118,86 +139,108 @@ class WGAN():
         model.add(Dense(1))
 
         model.summary()
+        model.save("WGAN2vec_discriminator.h5")
 
         img = Input(shape=self.img_shape)
         validity = model(img)
 
         return Model(img, validity)
 
-    def train(self, epochs, batch_size=128, sample_interval=50):
+    def pretrain_D(self, epochs, batch_size=128):
+        X_train = sentence_to_word_vec
+        valid = np.ones((batch_size, 1))
+        fake = np.zeros((batch_size, 1))
+        valid = valid * 0.9
+        # fake = fake + 0.1
+        print("pretraining D")
+        for epoch in range(epochs):
+            print("{}epochs".format(epoch))
+            idx = np.random.randint(0, X_train.shape[0], batch_size)
+            sentences = X_train[idx]
+
+            # Sample noise and generate a batch of new images
+            noise = np.random.normal(0, 1, (batch_size, self.latent_dim))
+            gen_sentences = self.generator.predict(noise)
+
+            # Train the discriminator (real classified as ones and generated as zeros)
+            d_loss_real = self.discriminator.train_on_batch(sentences, valid)
+            d_loss_fake = self.discriminator.train_on_batch(gen_sentences, fake)
+            d_loss = 0.5 * np.add(d_loss_real, d_loss_fake)
+
+    def train(self, epochs, batch_size=128, save_interval=50):
 
         # Load the dataset
-        (X_train, _), (_, _) = mnist.load_data()
-
-        # Rescale -1 to 1
-        X_train = (X_train.astype(np.float32) - 127.5) / 127.5
-        X_train = np.expand_dims(X_train, axis=3)
+        X_train = sentence_to_word_vec
 
         # Adversarial ground truths
-        valid = -np.ones((batch_size, 1))
-        fake = np.ones((batch_size, 1))
-
+        valid = np.ones((batch_size, 1))
+        fake = np.zeros((batch_size, 1))
+        valid = valid * 0.9
+        # fake = fake + 0.1
         for epoch in range(epochs):
 
-            for _ in range(self.n_critic):
+            # ---------------------
+            #  Train Discriminator
+            # ---------------------
 
-                # ---------------------
-                #  Train Discriminator
-                # ---------------------
+            # Select a random half of images
+            idx = np.random.randint(0, X_train.shape[0], batch_size)
+            imgs = X_train[idx]
 
-                # Select a random batch of images
-                idx = np.random.randint(0, X_train.shape[0], batch_size)
-                imgs = X_train[idx]
+            # Sample noise and generate a batch of new images
+            noise = np.random.normal(0, 1, (batch_size, self.latent_dim))
+            gen_imgs = self.generator.predict(noise)
 
-                # Sample noise as generator input
-                noise = np.random.normal(0, 1, (batch_size, self.latent_dim))
-
-                # Generate a batch of new images
-                gen_imgs = self.generator.predict(noise)
-
-                # Train the critic
-                d_loss_real = self.critic.train_on_batch(imgs, valid)
-                d_loss_fake = self.critic.train_on_batch(gen_imgs, fake)
-                d_loss = 0.5 * np.add(d_loss_fake, d_loss_real)
-
-                # Clip critic weights
-                for l in self.critic.layers:
-                    weights = l.get_weights()
-                    weights = [np.clip(w, -self.clip_value, self.clip_value) for w in weights]
-                    l.set_weights(weights)
+            # Train the discriminator (real classified as ones and generated as zeros)
+            d_loss_real = self.discriminator.train_on_batch(imgs, valid)
+            d_loss_fake = self.discriminator.train_on_batch(gen_imgs, fake)
+            d_loss = 0.5 * np.add(d_loss_real, d_loss_fake)
 
             # ---------------------
             #  Train Generator
             # ---------------------
 
+            # Train the generator (wants discriminator to mistake images as real)
             g_loss = self.combined.train_on_batch(noise, valid)
 
             # Plot the progress
-            print("%d [D loss: %f] [G loss: %f]" % (epoch, 1 - d_loss[0], 1 - g_loss[0]))
+            print("%d [D loss: %f, acc.: %.2f%%] [G loss: %f]" % (epoch, d_loss[0], 100 * d_loss[1], g_loss))
 
             # If at save interval => save generated image samples
-            if epoch % sample_interval == 0:
-                self.sample_images(epoch)
+            if epoch % save_interval == 0:
+                self.show_sentence(epoch)
 
-    def sample_images(self, epoch):
+    def show_sentence(self, epoch):
         r, c = 5, 5
-        noise = np.random.normal(0, 1, (r * c, self.latent_dim))
-        gen_imgs = self.generator.predict(noise)
+        noise = np.random.normal(0, 1, (r * c, 100))
+        gen_sentence = self.generator.predict(noise)
+        test = np.squeeze(gen_sentence)
+        for i in test:
+            sentence = ""
+            for j in i:
+                temp = model.wv.similar_by_vector(j)
+                sentence = sentence + temp[0][0] + " "
+            print(sentence)
 
-        # Rescale images 0 - 1
-        gen_imgs = 0.5 * gen_imgs + 0.5
-
-        fig, axs = plt.subplots(r, c)
-        cnt = 0
-        for i in range(r):
-            for j in range(c):
-                axs[i, j].imshow(gen_imgs[cnt, :, :, 0], cmap='gray')
-                axs[i, j].axis('off')
-                cnt += 1
-        fig.savefig("images/mnist_%d.png" % epoch)
-        plt.close()
+    def predict(self):
+        r, c = 5, 5
+        noise = np.random.normal(0, 1, (r * c, 100))
+        gen_sentence = self.generator.predict(noise)
+        test = np.squeeze(gen_sentence)
+        sentence_list = []
+        for i in test:
+            sentence = ""
+            for j in i:
+                temp = model.wv.similar_by_vector(j)
+                sentence = sentence + temp[0][0] + " "
+            sentence_list.append(sentence)
+        return sentence
 
 
 if __name__ == '__main__':
-    wgan = WGAN()
-    wgan.train(epochs=4000, batch_size=32, sample_interval=50)
+    wgan2vec = WGAN2vec()
+    wgan2vec.pretrain_D(epochs=100)
+    wgan2vec.train(epochs=4000, batch_size=32, sample_interval=50)
+    for i in range(100):
+        t = wgan2vec.predict()
+        print(t)
